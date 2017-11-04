@@ -13,6 +13,18 @@ class ChooseBirthdayViewController: UIViewController {
     
     @IBOutlet weak var datePick: UIDatePicker!
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "goLove" {
+            if datePick.date >= Date() {
+                let alertController = UIAlertController(title: "Fecha incorrecta", message: "Fecha errónea", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Entendido", style: UIAlertActionStyle.default))
+                self.present(alertController, animated: true, completion: nil)
+                return false
+            }
+        }
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }

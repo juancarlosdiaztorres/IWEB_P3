@@ -11,10 +11,10 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var textLabel: UILabel!
-    @IBOutlet weak var deathDate: UILabel! //oculta
-    var birthDate : Date = Date()
-    var loveDate : Date = Date()
-    var result : Date = Date()
+    @IBOutlet weak var deathLabel: UILabel! //oculta
+    var birthDate : Date?
+    var loveDate : Date?
+    var result : Date!
     //private let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -36,15 +36,26 @@ class ViewController: UIViewController {
     
     // Now, time to catch both vars from LoveVC
     @IBAction func goMain (_ segue: UIStoryboardSegue) {
-        if let vc = segue.source as? ChooseLoveViewController {
-            print("Entro en goMain")
-            loveDate = vc.currentLove
-            birthDate = vc.currentBirth
-            deathDate(birthDate, loveDate)
+        if segue.identifier == "goMain" {
+            if let vc = segue.source as? ChooseLoveViewController {
+                birthDate = vc.currentBirth
+                loveDate = vc.lovePick.date
+                if let bDate = birthDate, let lDate = loveDate {
+                    let deathDate = bDate - 2*lDate.timeIntervalSince(bDate)
+                    let calendar = Calendar.current
+                    let year = calendar.component(.year, from: deathDate)
+                    let month = calendar.component(.month, from: deathDate)
+                    let day = calendar.component(.day, from: deathDate)
+                    let ageComponents = calendar.dateComponents([.year], from: bDate, to:deathDate)
+                    let deathAge = ageComponents.year!
+                    deathLabel.text = "Moriras el \(day)/\(month)/\(year) con \(deathAge)años"
+                }
+            }
         }
     }
     
-   /*RESULTS*/
+    /*
+ /*RESULTS*/
     private func deathDate(_ birth: Date, _ love: Date) {
         if (birth >= love) {
             let alert = UIAlertController(title: "Error", message: "No puedes haberte enamorado antes de nacer", preferredStyle: .alert)
@@ -61,6 +72,6 @@ class ViewController: UIViewController {
             deathDate.text = dateStg
             
         }
-    }
+    }*/
 }
 
